@@ -45,16 +45,43 @@ test_lexer_expressions :: proc(t: ^testing.T) {
 	tests := []struct {
 		expected_type:    TokenType,
 		expected_literal: string,
-	}{{.LET, "let"}, {.IDENT, "five"}, {.ASSIGN, "="}, {.INT, "5"}}
+	} {
+		{.LET, "let"},
+		{.IDENT, "five"},
+		{.ASSIGN, "="},
+		{.INT, "5"},
+		{.LET, "let"},
+		{.IDENT, "add"},
+		{.ASSIGN, "="},
+		{.FUNCTION, "fn"},
+		{.LPAREN, "("},
+		{.IDENT, "x"},
+		{.COMMA, ","},
+		{.IDENT, "y"},
+		{.RPAREN, ")"},
+		{.LBRACE, "{"},
+		{.IDENT, "x"},
+		{.PLUS, "+"},
+		{.IDENT, "y"},
+		{.RBRACE, "}"},
+		{.LET, "let"},
+		{.IDENT, "result"},
+		{.ASSIGN, "="},
+		{.IDENT, "add"},
+		{.LPAREN, "("},
+		{.IDENT, "five"},
+		{.COMMA, ","},
+		{.IDENT, "five"},
+		{.RPAREN, ")"},
+		{.SEMICOLON, ";"},
+	}
 
 	input := `let five = 5;
-let ten = 10;
-
 let add = fn(x, y) {
   x + y
 }
 
-let result = add(five, ten);
+let result = add(five, five);
 `
 
 

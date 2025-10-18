@@ -84,6 +84,8 @@ next_token :: proc(l: ^Lexer) -> Token {
 		tok = new_token(l, .RBRACE, l.ch)
 	case ',':
 		tok = new_token(l, .COMMA, l.ch)
+	case '+':
+		tok = new_token(l, .PLUS, l.ch)
 	case 0:
 		tok = new_token(l, .EOF, l.ch)
 	case:
