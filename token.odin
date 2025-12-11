@@ -2,26 +2,35 @@ package monkey
 
 TokenType :: enum {
 	ILLEGAL,
-	EOF,
+	EOF, // end of file
+
 	// identifiers and literals
 	IDENT, // add, x
 	INT, // 42069
 
 	// operators
-	ASSIGN,
-	PLUS,
+	ASSIGN, // =
+	PLUS, // +
+	MINUS, // -
+	BANG, // !
+	ASTERISK, // *
+	SLASH, // /
+
+	// equality
+	LT, // <
+	GT, // >
 
 	// delimiters
-	COMMA,
-	SEMICOLON,
-	LPAREN,
-	RPAREN,
-	LBRACE,
-	RBRACE,
+	COMMA, // ,
+	SEMICOLON, // ;
+	LPAREN, // (
+	RPAREN, // )
+	LBRACE, // {
+	RBRACE, // }
 
 	// keywords
-	FUNCTION,
-	LET,
+	FUNCTION, // fn
+	LET, // let
 }
 
 Token :: struct {

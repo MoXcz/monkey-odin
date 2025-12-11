@@ -1,8 +1,6 @@
 package monkey
 
-import "core:fmt"
 import "core:testing"
-
 
 @(test)
 test_lexer_tokens :: proc(t: ^testing.T) {
@@ -75,14 +73,28 @@ test_lexer_expressions :: proc(t: ^testing.T) {
 		{.IDENT, "five"},
 		{.RPAREN, ")"},
 		{.SEMICOLON, ";"},
+		{.BANG, "!"},
+		{.MINUS, "-"},
+		{.SLASH, "/"},
+		{.ASTERISK, "*"},
+		{.INT, "5"},
+		{.SEMICOLON, ";"},
+		{.INT, "5"},
+		{.LT, "<"},
+		{.INT, "10"},
+		{.GT, ">"},
+		{.INT, "5"},
+		{.SEMICOLON, ";"},
 	}
 
 	input := `let five = 5;
 let add = fn(x, y) {
-  x + y
+    x + y
 }
 
 let result = add(five, five);
+!-/*5;
+5 < 10 > 5;
 `
 
 

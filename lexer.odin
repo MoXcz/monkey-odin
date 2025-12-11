@@ -86,6 +86,18 @@ next_token :: proc(l: ^Lexer) -> Token {
 		tok = new_token(l, .COMMA, l.ch)
 	case '+':
 		tok = new_token(l, .PLUS, l.ch)
+	case '-':
+		tok = new_token(l, .MINUS, l.ch)
+	case '!':
+		tok = new_token(l, .BANG, l.ch)
+	case '/':
+		tok = new_token(l, .SLASH, l.ch)
+	case '*':
+		tok = new_token(l, .ASTERISK, l.ch)
+	case '<':
+		tok = new_token(l, .LT, l.ch)
+	case '>':
+		tok = new_token(l, .GT, l.ch)
 	case 0:
 		tok = new_token(l, .EOF, l.ch)
 	case:
