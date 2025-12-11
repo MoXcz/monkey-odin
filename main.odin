@@ -1,18 +1,30 @@
 package monkey
 
-import "core:bytes"
 import "core:fmt"
+import "core:os"
 import "core:strings"
 
 main :: proc() {
-	input := "let five = 5;"
-	l := new_lexer(input)
+	file, ferr := os.read_entire_file_from_filename_or_err("main.monkey")
+	if ferr != nil {
+		fmt.println("invalid filename")
+	}
 
-	fmt.println(l)
+
+	input, err := strings.clone_from_bytes(file)
+	if err != nil {
+		fmt.println("invalid file contents")
+	}
+
+	l := new_lexer(input)
+	fmt.println(input)
+
 	tok := next_token(&l)
-	fmt.println(tok)
-	tok = next_token(&l)
-	fmt.println(tok)
+	for (tok.type != .EOF) {
+		fmt.println(tok)
+		tok = next_token(&l)
+	}
+
 	free_all()
 }
 
