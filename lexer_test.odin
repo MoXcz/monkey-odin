@@ -50,6 +50,7 @@ test_lexer_expressions :: proc(t: ^testing.T) {
 		{.IDENT, "five"},
 		{.ASSIGN, "="},
 		{.INT, "5"},
+		{.SEMICOLON, ";"},
 		{.LET, "let"},
 		{.IDENT, "add"},
 		{.ASSIGN, "="},
