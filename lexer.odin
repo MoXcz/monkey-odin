@@ -1,14 +1,12 @@
 package monkey
 
-import "core:bytes"
-import "core:fmt"
-import "core:strings"
-
 Lexer :: struct {
 	input:         string,
 	position:      int, // curent pos in input
 	read_position: int, // current reading pos in input (after current character)
 	ch:            byte, // current character
+	row:           int,
+	bos:           int,
 }
 
 new_lexer :: proc(input: string) -> Lexer {
@@ -27,7 +25,7 @@ lookup_ident :: proc(ident: string, keywords: map[string]TokenType) -> TokenType
 }
 
 skip_whitespace :: proc(l: ^Lexer) {
-	for l.ch == ' ' || l.ch == '\t' || l.ch == '\n' || l.ch == '\r' {
+	for l.ch == ' ' || l.ch == '\t' || l.ch == '\r' {
 		read_char(l)
 	}
 }
@@ -63,6 +61,8 @@ read_identifier :: proc(l: ^Lexer) -> string {
 next_token :: proc(l: ^Lexer) -> Token {
 	tok: Token
 
+	// TODO: theres should be a better way to handle this, instead of creating
+	// a keywords map on every call to next_token()
 	keywords := make(map[string]TokenType, context.temp_allocator)
 	keywords["fn"] = .FUNCTION
 	keywords["let"] = .LET
@@ -98,16 +98,28 @@ next_token :: proc(l: ^Lexer) -> Token {
 		tok = new_token(l, .LT, l.ch)
 	case '>':
 		tok = new_token(l, .GT, l.ch)
+	case '\n':
+		l.bos = l.position
+		l.row += 1
+		tok = new_token(l, .LN, l.ch)
 	case 0:
 		tok = new_token(l, .EOF, l.ch)
 	case:
 		if is_letter(l.ch) {
 			tok.literal = read_identifier(l)
 			tok.type = lookup_ident(tok.literal, keywords)
+			tok.pos = l.position - l.bos
+			tok.row = l.row
 			return tok
 		} else if is_digit(l.ch) {
 			tok.type = .INT
 			tok.literal = read_number(l)
+			// 'read_number' leaves 'lexer.position' at the start of the next token
+			// let five = 5;
+			//             ^ here
+			tok.pos = l.position - 1
+			tok.row = l.row
+			return tok
 		} else {
 			tok = new_token(l, .ILLEGAL, l.ch)
 		}
@@ -120,7 +132,7 @@ next_token :: proc(l: ^Lexer) -> Token {
 
 new_token :: proc(l: ^Lexer, token_type: TokenType, ch: byte) -> Token {
 	lit := l.input[l.position:l.read_position]
-	return Token{type = token_type, literal = lit}
+	return Token{type = token_type, literal = lit, pos = l.position - l.bos, row = l.row}
 }
 
 is_letter :: proc(ch: byte) -> bool {

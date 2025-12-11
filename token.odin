@@ -19,6 +19,7 @@ TokenType :: enum {
 	// equality
 	LT, // <
 	GT, // >
+	LN, // \n
 
 	// delimiters
 	COMMA, // ,
@@ -36,5 +37,7 @@ TokenType :: enum {
 Token :: struct {
 	type:    TokenType,
 	literal: string,
+	pos:     int,
+	row:     int,
 }
 
