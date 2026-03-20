@@ -5,7 +5,7 @@ import "core:os"
 import "core:strings"
 
 main :: proc() {
-	file, ferr := os.read_entire_file_from_filename_or_err("main.monkey")
+	file, ferr := os.read_entire_file_from_path("main.monkey", context.allocator)
 	if ferr != nil {
 		fmt.println("invalid filename")
 	}
@@ -25,6 +25,8 @@ main :: proc() {
 		tok = next_token(&l)
 	}
 
+	// to see .EOF
+	fmt.println(tok)
 	free_all()
 }
 

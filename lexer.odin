@@ -17,10 +17,14 @@ new_lexer :: proc(input: string) -> Lexer {
 	return l
 }
 
-lookup_ident :: proc(ident: string, keywords: map[string]TokenType) -> TokenType {
-	if tok, ok := keywords[ident]; ok {
-		return tok
+lookup_ident :: proc(ident: string) -> TokenType {
+	switch ident {
+	case "fn":
+		return .FUNCTION
+	case "let":
+		return .LET
 	}
+
 	return .IDENT
 }
 
@@ -60,13 +64,6 @@ read_identifier :: proc(l: ^Lexer) -> string {
 
 next_token :: proc(l: ^Lexer) -> Token {
 	tok: Token
-
-	// TODO: theres should be a better way to handle this, instead of creating
-	// a keywords map on every call to next_token()
-	keywords := make(map[string]TokenType, context.temp_allocator)
-	keywords["fn"] = .FUNCTION
-	keywords["let"] = .LET
-
 	skip_whitespace(l)
 
 	switch l.ch {
@@ -107,7 +104,7 @@ next_token :: proc(l: ^Lexer) -> Token {
 	case:
 		if is_letter(l.ch) {
 			tok.literal = read_identifier(l)
-			tok.type = lookup_ident(tok.literal, keywords)
+			tok.type = lookup_ident(tok.literal)
 			tok.pos = l.position - l.bos
 			tok.row = l.row
 			return tok
@@ -126,11 +123,13 @@ next_token :: proc(l: ^Lexer) -> Token {
 	}
 
 	read_char(l)
-	free_all(context.temp_allocator)
 	return tok
 }
 
 new_token :: proc(l: ^Lexer, token_type: TokenType, ch: byte) -> Token {
+	if ch == 0 {
+		return Token{type = token_type, literal = "", pos = l.position - l.bos, row = l.row}
+	}
 	lit := l.input[l.position:l.read_position]
 	return Token{type = token_type, literal = lit, pos = l.position - l.bos, row = l.row}
 }
