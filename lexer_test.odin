@@ -92,6 +92,31 @@ test_lexer_expressions :: proc(t: ^testing.T) {
 		{.GT, ">"},
 		{.INT, "5"},
 		{.SEMICOLON, ";"},
+		{.LN, "\n"},
+		{.LN, "\n"},
+		{.IF, "if"},
+		{.LPAREN, "("},
+		{.INT, "5"},
+		{.LT, "<"},
+		{.INT, "10"},
+		{.RPAREN, ")"},
+		{.LBRACE, "{"},
+		{.LN, "\n"},
+		{.RETURN, "return"},
+		{.TRUE, "true"},
+		{.SEMICOLON, ";"},
+		{.LN, "\n"},
+		{.RBRACE, "}"},
+		{.ELSE, "else"},
+		{.LBRACE, "{"},
+		{.LN, "\n"},
+		{.RETURN, "return"},
+		{.FALSE, "false"},
+		{.SEMICOLON, ";"},
+		{.LN, "\n"},
+		{.RBRACE, "}"},
+		{.LN, "\n"},
+		{.EOF, ""},
 	}
 
 	input := `let five = 5;
@@ -102,6 +127,12 @@ let add = fn(x, y) {
 let result = add(five, five);
 !-/*5;
 5 < 10 > 5;
+
+if (5 < 10) {
+  return true;
+} else {
+  return false;
+}
 `
 
 

@@ -32,6 +32,11 @@ TokenType :: enum {
 	// keywords
 	FUNCTION, // fn
 	LET, // let
+	TRUE,
+	FALSE,
+	IF,
+	ELSE,
+	RETURN,
 }
 
 Token :: struct {
