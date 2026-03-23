@@ -116,6 +116,15 @@ test_lexer_expressions :: proc(t: ^testing.T) {
 		{.LN, "\n"},
 		{.RBRACE, "}"},
 		{.LN, "\n"},
+		{.LN, "\n"},
+		{.INT, "10"},
+		{.EQ, "=="},
+		{.INT, "10"},
+		{.LN, "\n"},
+		{.INT, "10"},
+		{.NOT_EQ, "!="},
+		{.INT, "9"},
+		{.LN, "\n"},
 		{.EOF, ""},
 	}
 
@@ -133,6 +142,9 @@ if (5 < 10) {
 } else {
   return false;
 }
+
+10 == 10
+10 != 9
 `
 
 
@@ -152,4 +164,3 @@ if (5 < 10) {
 		)
 	}
 }
-

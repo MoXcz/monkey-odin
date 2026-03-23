@@ -20,6 +20,8 @@ TokenType :: enum {
 	LT, // <
 	GT, // >
 	LN, // \n
+	EQ, // ==
+	NOT_EQ, // !=
 
 	// delimiters
 	COMMA, // ,
@@ -45,4 +47,3 @@ Token :: struct {
 	pos:     int,
 	row:     int,
 }
-

@@ -77,8 +77,33 @@ next_token :: proc(l: ^Lexer) -> Token {
 	skip_whitespace(l)
 
 	switch l.ch {
+	// TODO: behavior can be abstracted into make_two_char_token(l: ^Lexer, peek_char: byte) -> Token
+	// which accepts the expected token to be found when peeking ('=' for '!=' and '=='), returning
+	// the Token if found
 	case '=':
-		tok = new_token(l, .ASSIGN, l.ch)
+		if peek_char(l) == '=' {
+			start_pos := l.position
+			read_char(l)
+			lit := l.input[start_pos:l.read_position]
+			tok = Token {
+				type    = .EQ,
+				literal = lit,
+			}
+		} else {
+			tok = new_token(l, .ASSIGN, l.ch)
+		}
+	case '!':
+		if peek_char(l) == '=' {
+			start_pos := l.position
+			read_char(l)
+			lit := l.input[start_pos:l.read_position]
+			tok = Token {
+				type    = .NOT_EQ,
+				literal = lit,
+			}
+		} else {
+			tok = new_token(l, .BANG, l.ch)
+		}
 	case ';':
 		tok = new_token(l, .SEMICOLON, l.ch)
 	case '(':
@@ -95,8 +120,6 @@ next_token :: proc(l: ^Lexer) -> Token {
 		tok = new_token(l, .PLUS, l.ch)
 	case '-':
 		tok = new_token(l, .MINUS, l.ch)
-	case '!':
-		tok = new_token(l, .BANG, l.ch)
 	case '/':
 		tok = new_token(l, .SLASH, l.ch)
 	case '*':
@@ -152,3 +175,11 @@ is_digit :: proc(ch: byte) -> bool {
 	return '0' <= ch && ch <= '9'
 }
 
+
+peek_char :: proc(l: ^Lexer) -> byte {
+	if l.read_position >= len(l.input) {
+		return 0
+	} else {
+		return l.input[l.read_position]
+	}
+}
