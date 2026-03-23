@@ -10,6 +10,7 @@ main :: proc() {
 	}
 	opt := os.args[1]
 	if opt == "repl" {
+		start_repl(os.to_stream(os.stdin), os.stdout)
 		os.exit(0)
 	}
 
